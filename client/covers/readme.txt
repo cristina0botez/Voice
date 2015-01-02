@@ -1,0 +1,1 @@
+This is temp folder that contains cover images

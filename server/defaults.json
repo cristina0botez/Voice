@@ -1,0 +1,22 @@
+{
+    "websockets": {
+        "port": 8080
+    },
+
+    "mpd": {
+        "port": 6600,
+        "address": "127.0.0.1",
+        "password": ""
+    },
+
+    "audioMetaData": {
+        "last.fm": {
+            "api_key": "",
+            "secret": "",
+            "useragent": "MusicPlayer/v0.1"
+        },
+
+        "musicPath": "",
+        "coverCachePath": "../client/covers/"
+    }
+}
