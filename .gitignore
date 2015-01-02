@@ -1,2 +1,5 @@
 
 server/node_modules/
+server/settings.json
+client/covers/*.png
+client/covers/*.jpg
