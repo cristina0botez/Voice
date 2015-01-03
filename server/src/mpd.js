@@ -70,6 +70,10 @@ function MPDClient(messageCallback) {
 				item[key] = val;
 			}
 
+			if(item !== null) {
+				playlist.push(item);
+			}
+
 			self.messageCallback.apply(this, ["playlistinfo", playlist]);
 		},
 
@@ -152,7 +156,7 @@ MPDClient.prototype.sendNext = function() {
 			self.client.write(self.sendQueue[0].trim() + "\n");
 
 			self.lastCommand = self.sendQueue[0].trim();
-			console.log("SENT:", self.lastCommand , ";");
+			//console.log("SENT:", self.lastCommand , ";");
 
 			self.sendQueue.shift();
 		}
@@ -195,7 +199,7 @@ MPDClient.prototype.executeQueue = function() {
 
 		if(typeof command == "array" || typeof command == "object") {
 			try {
-				console.log("Execute: ", command);
+				//console.log("Execute: ", command);
 				this.commands[command[0]].apply(this, [i].concat(command));
 			} catch(err) {
 				console.log(err);

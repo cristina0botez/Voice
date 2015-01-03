@@ -113,7 +113,7 @@ body {
 
     box-shadow: 1px 1px 7px #000;
 
-    transition: right 1s ease-in, transform 1s ease-in;
+    transition: left 1s ease-in, transform 1s ease-in;
 }
 
 .cover .pic {
@@ -123,6 +123,11 @@ body {
     background-size: cover;
     background-position: center center;
 }
+
+
+/* ==========================================================================
+   playing area
+   ========================================================================== */
 
 .playing .cover {
     left: calc(25% - 100px);
@@ -135,11 +140,12 @@ body {
     color: #eee;
     text-align: center;
     width: 350px;
-    left: calc(25% - 174px);
     position: absolute;
 
     font-weight: normal;
     text-shadow: 1px 1px rgba(0,0,0,0.5);
+
+    left: calc(25% - 174px);
 }
 
 .playing .title {
@@ -187,14 +193,47 @@ body {
     cursor: pointer;
 }
 
+
+body.random .playing .artist,
+body.random .playing .title,
+body.random .playing .time {
+    left: calc(50% - 174px);
+}
+
+body.random .playing .cover {
+    left: calc(50% - 100px);
+}
+
+body.random .playing .controls {
+    left: calc(50% - 95px);
+}
+
+/* ==========================================================================
+   Playlist area
+   ========================================================================== */
+
 .playlist .cover {
-    right: calc(25% - 100px);
+    left: calc(75% - 100px);
     top: calc(50% - 100px);
 }
 
-.playlist .cover.current {
+.playlist .cover.hide {
     display: none;
 }
+
+.playlist .cover.current {
+    left: calc(25% - 95px);
+    transform: rotate(0deg);
+}
+
+body.random .playlist .cover.current {
+    left: calc(50% - 95px);
+}
+
+
+/* ==========================================================================
+   Controls area
+   ========================================================================== */
 
 .controls.pause .pause {
     display: none;

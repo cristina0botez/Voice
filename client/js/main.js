@@ -2,8 +2,29 @@ var MusicPlayer = MusicPlayer || {};
 
 
 MusicPlayer.Graphics = {};
-MusicPlayer.Graphics.Refresh = function() 
+MusicPlayer.Graphics.GenerateStyles = function()
 {
+	if(MusicPlayer.Playlist && MusicPlayer.Playlist.data && $("#coverStyles").length == 0) {
+		var style = '<style id="coverStyles">';
+
+		var deg = 0;
+		var degStep = parseInt(90 / MusicPlayer.Playlist.data.length);
+
+		for(var i = 0; i<MusicPlayer.Playlist.data.length; i++) {
+			style += '.cover.item' + i + '{ left: calc( 75% - 100px ); transform: rotate('+deg+'deg); }';
+			deg += degStep;
+		}
+
+		style += '</style>';
+		$("body").append(style);
+	}
+
+};
+
+MusicPlayer.Graphics.Refresh = function()
+{
+	MusicPlayer.Graphics.GenerateStyles();
+
 	var w = $(window).width();
 	var h = $(window).height();
 
@@ -15,26 +36,14 @@ MusicPlayer.Graphics.Refresh = function()
 	});
 
 	var list = $($(".playlist .cover").get().reverse());
-	var deg = 0;
 
 	list.each(function() {
-
-		if( !$(this).is(".rotated") ) {
-
-			$(this).addClass("rotated").css({
-				transform: "rotate(" + deg + "deg)"
-			}).attr({
-				"data-transform": "rotate(" + deg + "deg)"
-			});
-		}
 
 		var index = $(this).attr("data-index");
 		if(MusicPlayer.Playlist.data[index].cover) {
 			var prop = "url('covers/" + MusicPlayer.Playlist.data[index].cover + "')";
 			$(this).find(".pic").css("background-image", prop);
 		}
-
-		deg += 4;
 	});
 
 	if(MusicPlayer.Status && MusicPlayer.Status.songid) {
@@ -45,11 +54,10 @@ MusicPlayer.Graphics.Refresh = function()
 			var next = $("#song" + songid);
 
 			var w = $(window).width()/2;
-			var r = w * 1.5  - 100;
 
 			var endCoverTransition = function(event) {
 				$(".playing .song").html(next.clone());
-				$(".playing .cover").removeAttr("style").removeAttr("id").removeClass("rotated");
+				$(".playing .cover").removeAttr("style").removeAttr("id").removeClass("rotated").attr("class", "cover");
 
 				var index = next.attr("data-index");
 
@@ -60,7 +68,7 @@ MusicPlayer.Graphics.Refresh = function()
 				$(".playing .title").html(MusicPlayer.Playlist.data[index].Title);
 				$(".time .total").html(formatTime(min, sec - min*60));
 
-				next.addClass("current");
+				next.addClass("hide");
 
 				$(this).off( 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', endCoverTransition);
 
@@ -69,18 +77,10 @@ MusicPlayer.Graphics.Refresh = function()
 
 			next.on( 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', endCoverTransition);
 
-			next.css({
-				right: r - 10,
-				transform: "rotate(0deg)"
-			});
+			next.addClass("current");
 
-			current.removeClass("current");
-			setTimeout(function() {
-				current.css({
-					right: "calc(25% - 100px)",
-					transform: current.attr("data-transform"),
-				})
-			}, 3);
+			current.removeClass("hide");
+			setTimeout(function() { current.removeClass("current") } , 3 );
 
 			$(".playing .song").html("");
 		}
@@ -110,7 +110,7 @@ function formatTime(m, s) {
 	}
 
 	return m + ":" + s;
-}
+};
 
 $(function() {
 
