@@ -4,13 +4,13 @@ MusicPlayer.Playlist = {};
 
 MusicPlayer.Playlist.set = function(data)
 {
-	MusicPlayer.Playlist.data = data.reverse();
+	MusicPlayer.Playlist.data = data;
 
 	$(".playlist").html("");
 
 	for(var i=0; i<data.length; i++) {
 		MusicPlayer.Connection.getcover(data[i].Artist, data[i].Title, data[i].Album, data[i].file);
-		$(".playlist").append('<div id="song' + data[i].Id + '" class="cover item'+data[i].Pos+'" data-id="'+ data[i].Id +'" data-index="'+i+'"><div class="pic"></div></div>');
+		$(".playlist").prepend('<div id="song' + data[i].Id + '" class="cover item'+data[i].Pos+'" data-id="'+ data[i].Id +'" data-index="'+data[i].Pos+'"><div class="pic"></div></div>');
 	}
 
 	MusicPlayer.Graphics.Refresh();

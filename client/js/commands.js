@@ -4,7 +4,7 @@ MusicPlayer.Commands = {};
 MusicPlayer.Status = {};
 
 MusicPlayer.Commands.playlistinfo = function(data) {
-	console.log("playlist", data);
+	$("#coverStyles").remove();
 	MusicPlayer.Playlist.set(data);
 }
 
@@ -22,4 +22,3 @@ MusicPlayer.Commands.status = function(data) {
 
 	MusicPlayer.Graphics.Refresh();
 }
-

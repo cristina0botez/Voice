@@ -114,6 +114,7 @@ body {
     box-shadow: 1px 1px 7px #000;
 
     transition: left 1s ease-in, transform 1s ease-in;
+    -webkit-transition: left 1s ease-in, -webkit-transform 1s ease-in;
 }
 
 .cover .pic {
@@ -180,6 +181,7 @@ body {
     opacity: 0;
 
     transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
 }
 
 .playing:hover .controls {
@@ -224,6 +226,7 @@ body.random .playing .controls {
 .playlist .cover.current {
     left: calc(25% - 95px);
     transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
 }
 
 body.random .playlist .cover.current {

@@ -11,7 +11,7 @@ MusicPlayer.Graphics.GenerateStyles = function()
 		var degStep = parseInt(90 / MusicPlayer.Playlist.data.length);
 
 		for(var i = 0; i<MusicPlayer.Playlist.data.length; i++) {
-			style += '.cover.item' + i + '{ left: calc( 75% - 100px ); transform: rotate('+deg+'deg); }';
+			style += '.cover.item' + i + '{ left: calc( 75% - 100px ); transform: rotate('+deg+'deg); -webkit-transform: rotate('+deg+'deg); }';
 			deg += degStep;
 		}
 
@@ -46,27 +46,25 @@ MusicPlayer.Graphics.Refresh = function()
 		}
 	});
 
-	if(MusicPlayer.Status && MusicPlayer.Status.songid) {
+	if(MusicPlayer.Status && MusicPlayer.Status.songid && MusicPlayer.Playlist && MusicPlayer.Playlist.data) {
 		var songid = MusicPlayer.Status.songid;
 		var current = $(".playlist .cover.current");
 
 		if(current.length == 0 || current.attr("data-id") != songid) {
 			var next = $("#song" + songid);
-
 			var w = $(window).width()/2;
+			var index = next.attr("data-index");
+
+			var sec = MusicPlayer.Playlist.data[index].Time;
+			var min = parseInt(sec/60);
+
+			$(".playing .artist").html(MusicPlayer.Playlist.data[index].Artist);
+			$(".playing .title").html(MusicPlayer.Playlist.data[index].Title);
+			$(".time .total").html(formatTime(min, sec - min*60));
 
 			var endCoverTransition = function(event) {
 				$(".playing .song").html(next.clone());
 				$(".playing .cover").removeAttr("style").removeAttr("id").removeClass("rotated").attr("class", "cover");
-
-				var index = next.attr("data-index");
-
-				var sec = MusicPlayer.Playlist.data[index].Time;
-				var min = parseInt(sec/60);
-
-				$(".playing .artist").html(MusicPlayer.Playlist.data[index].Artist);
-				$(".playing .title").html(MusicPlayer.Playlist.data[index].Title);
-				$(".time .total").html(formatTime(min, sec - min*60));
 
 				next.addClass("hide");
 
