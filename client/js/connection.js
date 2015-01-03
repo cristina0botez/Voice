@@ -34,7 +34,6 @@ MusicPlayer.Connection.send = function(data)
 	}
 }
 
-
 ///Get song cover
 MusicPlayer.Connection.getcover = function(artist, title, album, file)
 {

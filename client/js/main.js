@@ -8,10 +8,47 @@ MusicPlayer.Graphics.GenerateStyles = function()
 		var style = '<style id="coverStyles">';
 
 		var deg = 0;
-		var degStep = parseInt(90 / MusicPlayer.Playlist.data.length);
+		var degStep = parseInt(360 / MusicPlayer.Playlist.data.length);
+		var totalItems = MusicPlayer.Playlist.data.length;
 
-		for(var i = 0; i<MusicPlayer.Playlist.data.length; i++) {
-			style += '.cover.item' + i + '{ left: calc( 75% - 100px ); transform: rotate('+deg+'deg); -webkit-transform: rotate('+deg+'deg); }';
+		for(var i = 0; i<totalItems; i++) {
+			var rad = deg * (Math.PI / 180);
+			var x = parseInt(300 * Math.cos (rad));
+        	var y = parseInt(300 * Math.sin (rad));
+
+        	var randDeg = Math.random() * 360;
+        	var sign = " + ";
+        	if(Math.random() > 0.5) sign = " - ";
+
+        	var randX = sign + "200px" + sign + parseInt(Math.random() * 35) + "%";
+        	var randY = parseInt(Math.random() * 40);
+
+			style +=
+'	.playlist .cover.item' + i + '{' +
+'		left: calc( 75% - 100px );' +
+'		transform: rotate(' + (deg) + 'deg);' +
+'		-webkit-transform: rotate(' + (deg) + 'deg);' +
+'	}' +
+
+'	.playlist .cover.played.item' + i + '{' +
+'		z-index: ' + i + ';' +
+'	}' +
+
+'	body.repeat .cover.item' + i + '{' +
+'		left: calc( 50% - 100px - ' + x + 'px);' +
+'		top: calc( 50% - 75px - ' + y + 'px);' +
+'		transform: rotate(' + deg + 'deg)  scale(0.6);' +
+'		-webkit-transform: rotate(' + deg + 'deg)  scale(0.6);' +
+'		z-index: 1000;' +
+'	}'+
+
+'	body.random .cover.item' + i + '{' +
+'		left: calc( 50% - 100px ' + randX+');' +
+'		top: calc( 50% - 200px + ' + randY+'%);' +
+'		transform: rotate(' + randDeg + 'deg)  scale(0.6);' +
+'		-webkit-transform: rotate(' + randDeg + 'deg)  scale(0.6);' +
+'	}';
+
 			deg += degStep;
 		}
 
@@ -78,7 +115,14 @@ MusicPlayer.Graphics.Refresh = function()
 			next.addClass("current");
 
 			current.removeClass("hide");
-			setTimeout(function() { current.removeClass("current") } , 3 );
+			setTimeout(function() {
+				current.removeClass("current");
+
+				for(var i = 0; i<MusicPlayer.Playlist.data.length; i++) {
+					if(i < parseInt(MusicPlayer.Status.song)) $(".playlist .cover.item"+i).addClass("played");
+													  	 else $(".playlist .cover.item"+i).removeClass("played");
+				}
+			} , 3 );
 
 			$(".playing .song").html("");
 		}
