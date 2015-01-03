@@ -17,6 +17,7 @@ function MPDClient(messageCallback) {
 	self.messageCallback = messageCallback;
 	self.isPendingConnection = false;
 	self.isConnected = false;
+	self.reconnect = true;
 
 	self.sendQueue = [];
 	self.receivedQueue = [];
@@ -82,6 +83,12 @@ function MPDClient(messageCallback) {
 			var data = splitResult(self.receivedQueue, index);
 
 			self.messageCallback.apply(this, ["status", data]);
+		},
+
+		///idle state ended
+		"idle": function(index) {
+			var data = splitResult(self.receivedQueue, index);
+			self.messageCallback.apply(this, ["idle", data]);
 		}
 	}
 
@@ -119,8 +126,10 @@ MPDClient.prototype.connect = function() {
 	///when mpd close the conenction
 	self.client.on('end', function()
 	{
-		self.close();
-		self.connect();
+		if(self.reconnect) {
+			self.close();
+			self.connect();
+		}
 	});
 }
 
@@ -128,20 +137,27 @@ MPDClient.prototype.connect = function() {
 MPDClient.prototype.close = function(data) {
 	this.isPendingConnection = false;
 	this.isConnected = false;
+	this.reconnect = false;
 
 	console.log('Disconnected from MPD.');
 };
 
+MPDClient.prototype.disconect = function(data) {
+	this.client.end();
+	this.close();
+};
+
+
 ///Add a message to the receive cache and try to parse it
 MPDClient.prototype.receive = function(data) {
-	//console.log("RECEIVE ", data);
+	console.log("RECEIVE ", data);
 	this.cache += data;
 	this.parseCache();
 };
 
 ///Add a new command in queue and tryes to send it to MPD
 MPDClient.prototype.send = function(data) {
-	this.sendQueue.push(data + "\n");
+	this.sendQueue.push(data);
 	this.sendNext();
 };
 
@@ -150,9 +166,10 @@ MPDClient.prototype.send = function(data) {
 MPDClient.prototype.sendNext = function() {
 	var self = this;
 
-	if(self.isConnected && !self.executing) {
-		if(self.sendQueue.length > 0) {
+	if(self.sendQueue.length > 0) {
+		if(self.isConnected && (!self.executing || self.sendQueue[0] == "noidle" )) {
 			self.executing = true;
+			console.log("send:", self.sendQueue[0]);
 			self.client.write(self.sendQueue[0].trim() + "\n");
 
 			self.lastCommand = self.sendQueue[0].trim();

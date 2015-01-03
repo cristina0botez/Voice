@@ -66,6 +66,8 @@ function MPDProxy(conn) {
             case 'play':
             case 'stop':
             case 'pause':
+            case 'idle':
+            case 'noidle':
                 client.send(str);
                 break;
 
@@ -75,6 +77,7 @@ function MPDProxy(conn) {
     });
 
     conn.on("close", function (code, reason) {
+        client.disconect();
         console.log("Connection closed")
     });
 }

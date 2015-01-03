@@ -132,12 +132,6 @@ MusicPlayer.Graphics.Refresh = function()
 		$(".controls").attr("class", "controls " + MusicPlayer.Status.state);
 	}
 
-	if(MusicPlayer.Status && MusicPlayer.Status.time) {
-		var sec = MusicPlayer.Status.time;
-		var min = parseInt(sec/60);
-
-		$(".time .elapsed").html(formatTime(min, sec - min*60));
-	}
 };
 
 function formatTime(m, s) {
@@ -161,21 +155,27 @@ $(function() {
 	}).resize();
 
 	$(".controls .pause").click(function() {
-		MusicPlayer.Connection.send("pause");
-		MusicPlayer.Connection.send("status");
+		MusicPlayer.Connection.pause();
 	});
 
 	$(".controls .play").click(function() {
-		MusicPlayer.Connection.send("play");
-		MusicPlayer.Connection.send("status");
+		MusicPlayer.Connection.play();
 	});
 
 	$(".controls .stop").click(function() {
-		MusicPlayer.Connection.send("stop");
-		MusicPlayer.Connection.send("status");
+		MusicPlayer.Connection.stop();
 	});
 
 	setInterval(function() {
-		MusicPlayer.Connection.send("status");
+
+		if(MusicPlayer.Status && MusicPlayer.Status.elapsed) {
+			if(MusicPlayer.Status.state == "play") MusicPlayer.Status.elapsed += 1;
+
+			var sec = parseInt(MusicPlayer.Status.elapsed);
+			var min = parseInt(sec/60);
+
+			$(".time .elapsed").html(formatTime(min, sec - min*60));
+		}
+
 	}, 1000);
 });

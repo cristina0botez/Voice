@@ -50,12 +50,43 @@ MusicPlayer.Connection.getcover = function(artist, title, album, file)
 	MusicPlayer.Connection.send(JSON.stringify(data));
 }
 
+//Get status
+MusicPlayer.Connection.status = function(artist, title, album, file)
+{
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
+//Get status
+MusicPlayer.Connection.play = function(artist, title, album, file)
+{
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("play");
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
+//Get status
+MusicPlayer.Connection.pause = function(artist, title, album, file)
+{
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("pause");
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
+//Get status
+MusicPlayer.Connection.stop = function(artist, title, album, file)
+{
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("stop");
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
 
 $(function() {
 	MusicPlayer.Connection.start(function() {
-		MusicPlayer.Connection.send("status");
 		MusicPlayer.Connection.send("playlistinfo");
-		MusicPlayer.Connection.send("status");
-
+		MusicPlayer.Connection.status();
 	});
 });
