@@ -115,7 +115,7 @@ body {
 
     box-shadow: 1px 1px 7px #000;
 
-    transition: left 1s ease-in, top 1s ease-out, transform 1s ease-in;
+    transition: left 1s ease-in, opacity 2s ease-out, top 1s ease-out, transform 1s ease-in;
     -webkit-transition: left 1s ease-in, opacity 2s ease-out, top 1s ease-in, -webkit-transform 1s ease-in;
 }
 
@@ -136,6 +136,27 @@ body {
     text-shadow: 1px 1px rgba(0,0,0,0.5);
 }
 
+.playMode {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.playMode img {
+    width: 32px;
+    margin: 0 20px;
+    cursor: pointer;
+}
+
+body.random .playMode img.random,
+body.repeat .playMode img.repeat {
+    opacity: 1;
+}
+
+body .playMode img.random,
+body .playMode img.repeat {
+    opacity: 0.4;
+}
 
 /* ==========================================================================
    playing area
@@ -158,6 +179,12 @@ body {
 
     transition: left 1s ease-in;
     -webkit-transition: left 1s ease-in;
+}
+
+.playing .artist,
+.playing .title {
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .playing .title {
@@ -195,6 +222,48 @@ body {
     -webkit-transition: all 0.2s ease-in;
 }
 
+.playing .line,
+.playing .position,
+.playing .timeline {
+    display: inline-block;
+    transition: all 1s linear;
+    -webkit-transition: all 1s linear;
+}
+
+.playing .line {
+    margin: 0 7px 0 5px;
+    position: relative;
+    width: 0%;
+    cursor: pointer;
+}
+
+.playing .timeline {
+    height: 10px;
+    border-bottom: 1px solid #fff;
+    width: 100%;
+    vertical-align: top;
+    opacity: 0;
+}
+
+.playing .line .position {
+    position: absolute;
+    left: -2px;
+    top: 0;
+}
+
+.playing:hover .controls {
+    opacity: 1;
+}
+
+.playing:hover .line {
+    width: 150px;
+    margin: 0 5px 0 5px;
+}
+
+.playing:hover .timeline {
+    opacity: 1;
+}
+
 .playing:hover .controls {
     opacity: 1;
 }
@@ -227,6 +296,13 @@ body.consume .playing .controls {
 .playlist .cover {
     left: calc(50% - 100px);
     top: calc(50% - 100px);
+    cursor: pointer;
+}
+
+.playlist .cover.new,
+.playlist .cover.remove {
+    left: calc(50% - 100px) !important;
+    top: calc(0% - 300px) !important;
 }
 
 body .playlist .cover.played {
@@ -241,15 +317,23 @@ body .playlist .cover.played {
 body .playlist .cover.current,
 body.repeat .playlist .cover.current,
 body.random .playlist .cover.current {
-    left: calc(50% - 95px);
+    left: calc(50% - 100px);
     top: calc(50% - 100px);
     transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
 }
 
 body.repeat .cover.played {
-    opacity: 0.1;
+    opacity: 0.3;
     z-index: 900 !important;
+}
+
+body.repeat .cover:hover.played {
+    opacity: 1;
+    z-index: 1000 !important;
+
+     transition: opacity 0.2s ease-in;
+    -webkit-transition: opacity 0.2s ease-in;
 }
 
 body.repeat.random .cover.played {

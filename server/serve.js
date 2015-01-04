@@ -25,6 +25,8 @@ var server = ws.createServer(function (conn)
 	MPDProxy(conn);
 }).listen( defaultSettings.websockets.port );
 
+
+
 ///the mpd proxy
 function MPDProxy(conn) {
     var client = mpd.createClient(defaultSettings.mpd, function() {
@@ -60,19 +62,23 @@ function MPDProxy(conn) {
         }
 
         //plain text message
-        switch(str) {
+        var command = str.split(" ");
+        switch(command[0]) {
             case 'playlistinfo':
             case 'status':
             case 'play':
             case 'stop':
             case 'pause':
+            case 'seekcur':
             case 'idle':
             case 'noidle':
+            case 'random':
+            case 'repeat':
                 client.send(str);
                 break;
 
             default:
-                console.log("Unknown text message:", str);
+                console.log("Unknown text message:", command[0]);
         }
     });
 

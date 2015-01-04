@@ -48,7 +48,7 @@ function MPDClient(messageCallback) {
 		"ACK": function(index) {
 			self.executing = false;
 
-			prepareNextCommand();
+			self.prepareNextCommand();
 		},
 
 		///construct the mpd playlist

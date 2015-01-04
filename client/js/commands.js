@@ -69,8 +69,11 @@ MusicPlayer.Commands.status = function(data) {
 		MusicPlayer.Status[data[i][0]] = data[i][1];
 	}
 
-	MusicPlayer.Status["time"] = parseInt(MusicPlayer.Status["time"]);
-	MusicPlayer.Status["elapsed"] = parseFloat(MusicPlayer.Status["elapsed"]);
+	if( MusicPlayer.Status["time"] ) MusicPlayer.Status["time"] = parseInt(MusicPlayer.Status["time"]);
+								else MusicPlayer.Status["time"] = 0;
+
+	if( MusicPlayer.Status["elapsed"] ) MusicPlayer.Status["elapsed"] = parseFloat(MusicPlayer.Status["elapsed"]);
+								   else MusicPlayer.Status["elapsed"] = 0;
 
 	if(MusicPlayer.Status["random"] && MusicPlayer.Status["random"] == "0") $("body").removeClass("random");
 		else $("body").addClass("random");

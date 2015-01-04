@@ -51,23 +51,27 @@ MusicPlayer.Connection.getcover = function(artist, title, album, file)
 }
 
 //Get status
-MusicPlayer.Connection.status = function(artist, title, album, file)
+MusicPlayer.Connection.status = function()
 {
 	MusicPlayer.Connection.send("status");
 	MusicPlayer.Connection.send("idle");
 }
 
 //Get status
-MusicPlayer.Connection.play = function(artist, title, album, file)
+MusicPlayer.Connection.play = function(songpos)
 {
 	MusicPlayer.Connection.send("noidle");
-	MusicPlayer.Connection.send("play");
+
+	if(songpos >= 0) {
+		MusicPlayer.Connection.send("play " + songpos);
+	} else MusicPlayer.Connection.send("play");
+
 	MusicPlayer.Connection.send("status");
 	MusicPlayer.Connection.send("idle");
 }
 
 //Get status
-MusicPlayer.Connection.pause = function(artist, title, album, file)
+MusicPlayer.Connection.pause = function()
 {
 	MusicPlayer.Connection.send("noidle");
 	MusicPlayer.Connection.send("pause");
@@ -76,7 +80,7 @@ MusicPlayer.Connection.pause = function(artist, title, album, file)
 }
 
 //Get status
-MusicPlayer.Connection.stop = function(artist, title, album, file)
+MusicPlayer.Connection.stop = function()
 {
 	MusicPlayer.Connection.send("noidle");
 	MusicPlayer.Connection.send("stop");
@@ -84,9 +88,53 @@ MusicPlayer.Connection.stop = function(artist, title, album, file)
 	MusicPlayer.Connection.send("idle");
 }
 
+//seek the current song
+MusicPlayer.Connection.seekcur = function(positionInSeconds)
+{
+	var positionInSeconds = Math.round(positionInSeconds * 100) / 100
+
+	console.log("seek", positionInSeconds);
+
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("seekcur " + parseInt(positionInSeconds));
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
+//Load the current playlist
+MusicPlayer.Connection.playlistinfo = function()
+{
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("playlistinfo");
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
+
+//set random mode
+MusicPlayer.Connection.random = function(val)
+{
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("random " + (val ? "1" : "0") );
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
+//set repeat mode
+MusicPlayer.Connection.repeat = function(val)
+{
+	MusicPlayer.Connection.send("noidle");
+	MusicPlayer.Connection.send("repeat " + (val ? "1" : "0") );
+	MusicPlayer.Connection.send("status");
+	MusicPlayer.Connection.send("idle");
+}
+
 $(function() {
 	MusicPlayer.Connection.start(function() {
-		MusicPlayer.Connection.send("playlistinfo");
 		MusicPlayer.Connection.status();
+
+		setTimeout(function() {
+			MusicPlayer.Connection.playlistinfo();
+		}, 1000);
 	});
 });
